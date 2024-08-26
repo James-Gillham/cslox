@@ -1,4 +1,6 @@
-﻿public static class Lox
+﻿namespace cslox.src;
+
+public static class Lox
 {
     private static bool _hadError = false;
 
@@ -21,7 +23,7 @@
 
     private static void RunFile(string path)
     {
-        using(var sr = new StreamReader(path))
+        using (var sr = new StreamReader(path))
         {
             Run(sr.ReadToEnd());
         };

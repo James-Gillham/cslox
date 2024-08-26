@@ -1,3 +1,5 @@
+namespace cslox.src;
+
 public class Scanner(string Source)
 {
     private static readonly Dictionary<string, TokenType> _keywords;
@@ -26,7 +28,7 @@ public class Scanner(string Source)
             { "true", TokenType.TRUE },
             { "var", TokenType.VAR },
             { "while", TokenType.WHILE }
-            };
+        };
     }
 
     public List<Token> ScanTokens()
@@ -79,6 +81,10 @@ public class Scanner(string Source)
                         Advance();
                     }
                 }
+                else if (Match('*'))
+                {
+                    BlockComment();
+                }
                 else
                 {
                     AddToken(TokenType.SLASH);
@@ -110,6 +116,30 @@ public class Scanner(string Source)
                 break;
         }
     }
+
+    private void BlockComment()
+    {
+        while (!IsAtEnd())
+        {
+            // If we are terminating the block comment
+            if (Peek() == '*' && PeekNext() == '/')
+            {
+                Advance();
+                Advance();
+                return;
+            }
+            if (Peek() == '\n')
+            {
+                _line++;
+            }
+
+            Advance();
+        }
+
+        Lox.Error(_line, "Unterminated block comment.");
+        return;
+    }
+
     private void Identifier()
     {
         while (IsAlphaNumeric(Peek()))

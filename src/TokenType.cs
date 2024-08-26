@@ -1,3 +1,5 @@
+namespace cslox.src;
+
 public enum TokenType
 {
     // Single character tokens
